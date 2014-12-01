@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/fh/fast/shou_w/bin/Robin/freebayes/freebayes -b ../alignment/aligned_reads.sorted.bam -f ../reference/saccharomyces_cerevisiae_rm11-1a_1_supercontigs.fasta -P 0.999 -p 20  -K >sample.freebyase.pop.pval99.popploidy20.vcf
