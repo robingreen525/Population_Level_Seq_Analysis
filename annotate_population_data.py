@@ -25,7 +25,9 @@ contig_sites={}
 
 for line in ll:
 	#line=ll[i]
+        #line=line.rstrip('\n')
 	line=line.split('\t')
+        print line
 	gene_id=line[8].split(';')[0].split()[1]
 	if line[2]=='exon':
 		start=int(line[3])
