@@ -9,7 +9,7 @@ genes=[]
 
 for line in ll:
 	line=line.split('\t')
-	if line[0][0:3]=='chr':
+	if line[0]=='NC_012967.1':
 		#print line
                 if line[2]=='gene':
                         #print line

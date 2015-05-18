@@ -32,7 +32,7 @@ f=open(sys.argv[2],'r')
 ll=f.readlines()
 
 for line in ll:
-        #print line
+        #clprint line
         line=line.split('\t')
         if line[0][0:3]=='chr':
                 chr=line[0]
