@@ -183,7 +183,7 @@ for strain in strains:
 									data=strain+','
 									
 									for thing in line:
-										data=data+thing.strip('\n')+','
+										data=data+','+thing.strip('\n')
 									
 									data=data+','+aa_ref+str(len(seq)/3)+aa_new+'\n'
 									#print(data)
