@@ -2,6 +2,9 @@
 # i have a fasta file that gives the sequence for each gene in the cerviesea genome (from SGD). I will build a dictionary
 # of the genes and use that information to assess frame and mutations for each SNP called.
 
+#usage
+#python Population_Level_Seq_Analysis/record_aminoacid_changes.py -genefasta /fh/fast/shou_w/NextGenSeq/reference/S288C_orf_genomic_all.fasta -strainfile /fh/fast/shou_w/NextGenSeq/PopSeq/Parameter+Strain_Files/AaronMiller_strains.txt -dir /fh/fast/shou_w/NextGenSeq/PopSeq/MDunham/Miller_SulfateGlucosePhosphate_2015/ -genefile /fh/fast/shou_w/NextGenSeq/reference/S288C.gff
+
 
 
 # Dictionary holding the code to life: Codon to Amino Acid map
@@ -22,6 +25,18 @@ code = {     'ttt': 'F', 'tct': 'S', 'tat': 'Y', 'tgt': 'C',
              'gta': 'V', 'gca': 'A', 'gaa': 'E', 'gga': 'G',
              'gtg': 'V', 'gcg': 'A', 'gag': 'E', 'ggg': 'G'
         }
+
+
+
+rev_comp={'a':'t','t':'a','c':'g','g':'c'}
+
+def rev_comp_codon(codon,dict):
+	#new=''
+	#for base in codon:
+		#new=new+dict[base]
+	
+	#return(new[::-1])
+	return(codon)
 
 #import libraries needed
 import sys
@@ -75,17 +90,12 @@ for line in ll:
 			else:
 				lookup_table.append([chr,start,end,strand,ID,'unknown']) # if no standard name, just add 'unknown'
 
-
-
-
-
 gene_seq={}
 
 ### build a dictionary of genes and their sequences
 ll=args.genefasta.readlines()
 end=len(ll)
 i=0
-
 while i<end-1:
 	line=ll[i]
 	if line[0]=='>': # for each header, get the corresponding seqeunce for each gene
@@ -101,8 +111,11 @@ while i<end-1:
 		gene_seq[sysname]=geneseq # assign seq to key (systematic name)
 	
 	
+# create master.csv file where all mutation information for every strain will be stored	
 all_mutations=path+'/master.csv'	
 a=open(all_mutations,'w')	
+
+
 	
 for strain in strains:
 	full_path=path+strain
@@ -123,52 +136,41 @@ for strain in strains:
 					end=int(gene[2])
 					strand=gene[3]
 					pos=int(line[1])
-					
-					#print sys_gene,sys_gene_ref,start, end, strand
-					#print(strand)
-					if(strand=='+'):
-						frame=((pos-start)%3) # 1=first base, 2=second base, 0= third base
+
+					if(strand=='+'): # annotation for Waston strand
+						frame=((pos-start+1)%3) # 1=first base, 2=second base, 0= third base
 						
-						if(frame==1):
-							codon=seq[(start-start):(pos-start)+3]
-							codon=codon[-3:]
+						if(frame==1): # first base in codon
+							codon1=seq[(start-start):((pos-start)+3)] # get 2 bases after  base 
+							codon=codon1[-3:] # last 3 bases in strong
 							newcodon=list(codon)
-							newcodon[0]=line[4]
+							newcodon[0]=line[4] #change first base in codon to SNP
 							newcodon=''.join(newcodon)
-							#print(line)
-							#print codon
-							#print newcodon
 							codon=codon.lower()
 							newcodon=newcodon.lower()
 							
 							if(len(codon)==3 and len(newcodon)==3): #would miss indels, fix later
-								aa_ref=code[codon]
-								aa_new=code[newcodon]
-							
-								if(aa_ref!=aa_new):
-									#print 'Nonsynamous mutation'
-									#print aa_ref
-									#print aa_new
-									data=strain+','
-									
+								aa_ref=code[codon] # get AA of ref
+								aa_new=code[newcodon] # get AA of alt
+															
+								if(aa_ref!=aa_new): #if not a silent mutation, record 
+									data=strain+','	
+									i=1
 									for thing in line:
-										data=data+thing.strip('\n')+','
-									
-									data=data+','+aa_ref+str(len(seq)/3)+aa_new+'\n'
-									#print(data)
+										data=data+thing.strip('\n')
+										if i<len(line):
+											data=data+','
+											i+=1								
+									data=data+','+aa_ref+str(len(codon1)/3)+aa_new+','+codon+','+newcodon+','+str(frame)+'\n'
 									a.write(data)
 									
 								
-						elif(frame==2):
-							#codon=seq[(start-start):(pos-start)+3]
-							codon=seq[(start-start):(pos-start)+2]
-							codon=codon[-3:]
+						elif(frame==2): # if mutation in second position
+							codon1=seq[(start-start):((pos-start)+2)] # get one base after snp base
+							codon=codon1[-3:]
 							newcodon=list(codon)
-							newcodon[0]=line[4]
+							newcodon[1]=line[4]
 							newcodon=''.join(newcodon)
-							#print(line)
-							#print codon
-							#print newcodon
 							codon=codon.lower()
 							newcodon=newcodon.lower()
 							
@@ -177,46 +179,141 @@ for strain in strains:
 								aa_new=code[newcodon]
 							
 								if(aa_ref!=aa_new):
-									#print 'Nonsynamous mutation'
-									#print aa_ref
-									#print aa_new
 									data=strain+','
 									
+									i=1
 									for thing in line:
-										data=data+','+thing.strip('\n')
+										data=data+thing.strip('\n')
+										if i<len(line):
+											data=data+','
+											i+=1
 									
-									data=data+','+aa_ref+str(len(seq)/3)+aa_new+'\n'
-									#print(data)
+									data=data+','+aa_ref+str(len(codon1)/3)+aa_new+','+codon+','+newcodon+','+str(frame)+'\n'
 									a.write(data)
-						elif(frame==0):
-							#codon=seq[(start-start):(pos-start)+3]
-							codon=seq[(start-start):(pos-start)+1]
-							codon=codon[-3:]
+						elif(frame==0): # if snp in 3ed base
+							codon1=seq[(start-start):(pos-start)+1] # last base is 3rd position in codon
+							codon=codon1[-3:]
 							newcodon=list(codon)
-							newcodon[0]=line[4]
+							
+							newcodon[-1]=line[4]
 							newcodon=''.join(newcodon)
-							#print(line)
-							#print codon
-							#print newcodon
+							
 							codon=codon.lower()
 							newcodon=newcodon.lower()
 							
 							if(len(codon)==3 and len(newcodon)==3): #would miss indels, fix later
+								codon=str(rev_comp_codon(codon,rev_comp)) 
+								newcodon=str(rev_comp_codon(codon,rev_comp))
 								aa_ref=code[codon]
 								aa_new=code[newcodon]
 							
 								if(aa_ref!=aa_new):
-									#print 'Nonsynamous mutation'
-									#print aa_ref
-									#print aa_new
 									data=strain+','
 									
+									i=1
 									for thing in line:
-										data=data+thing.strip('\n')+','
+										data=data+thing.strip('\n')
+										if i<len(line):
+											data=data+','
+											i+=1
 									
-									data=data+','+aa_ref+str(len(seq)/3)+aa_new+'\n'
-									#print(data)
+									
+									data=data+','+aa_ref+str(len(codon1)/3)+aa_new+','+codon+','+newcodon+','+str(frame)+'\n'
 									a.write(data)	
 
+					elif(strand=='-'):
+						# if on crick strand, must swap end and start positions. Also do rev comp of bases
+						temp=end
+						end=start
+						start=temp
+						
+						frame=((start-pos)+1)%3# 1=first base, 2=second base, 0= third base
+						
+						if(frame==1):
+							codon1=seq[(start-start):((start-pos)+3)]
+							codon=codon1[-3:]
+
+							if(len(line[4])==1 and len(codon)==3): #would miss indels, fix later
+								codon=codon.lower()
+								codon=str(rev_comp_codon(codon,rev_comp))
+								newcodon=list(codon)
+								
+								newcodon[0]=rev_comp[line[4].lower()]
+								newcodon=''.join(newcodon)
+								newcodon=newcodon.lower()		
+								aa_ref=code[codon]
+								newcodon=str(rev_comp_codon(newcodon,rev_comp))
+								aa_new=code[newcodon]
+								
+								if(aa_ref!=aa_new):
+									data=strain+','
+									
+									i=1
+									for thing in line:
+										data=data+thing.strip('\n')
+										if i<len(line):
+											data=data+','
+											i+=1
+									
+									data=data+','+aa_ref+str(len(codon1)/3)+aa_new+','+codon+','+newcodon+','+str(frame)+'\n'	
+									a.write(data)
+
+						elif(frame==2):
+							codon1=seq[(start-start):((start-pos)+2)]
+							codon=codon1[-3:]
+
+							if(len(line[4])==1 and len(codon)==3): #would miss indels, fix later
+								codon=codon.lower()
+								codon=str(rev_comp_codon(codon,rev_comp))
+								newcodon=list(codon)
+								newcodon[1]=rev_comp[line[4].lower()]
+								newcodon=''.join(newcodon)
+								newcodon=newcodon.lower()		
+								aa_ref=code[codon]
+								newcodon=str(rev_comp_codon(newcodon,rev_comp))
+								aa_new=code[newcodon]
+								
+								if(aa_ref!=aa_new):
+									data=strain+','
+									
+									i=1
+									for thing in line:
+										data=data+thing.strip('\n')
+										if i<len(line):
+											data=data+','
+											i+=1
+									
+									data=data+','+aa_ref+str(len(codon1)/3)+aa_new+','+codon+','+newcodon+','+str(frame)+'\n'
+									a.write(data)
+						elif(frame==0):
+							codon1=seq[(start-start):((start-pos))+1]
+							codon=codon1[-3:]
+							newcodon=list(codon)
+
+							if(len(line[4])==1 and len(codon)==3): #would miss indels, fix later
+								codon=codon.lower()
+								codon=str(rev_comp_codon(codon,rev_comp))
+								newcodon=list(codon)
+								newcodon[-1]=rev_comp[line[4].lower()]
+								newcodon=''.join(newcodon)
+								newcodon=newcodon.lower()		
+								aa_ref=code[codon]
+								newcodon=str(rev_comp_codon(newcodon,rev_comp))
+								aa_new=code[newcodon]
+							
+								if(aa_ref!=aa_new):
+									
+									data=strain+','
+									
+									i=1
+									for thing in line:
+										data=data+thing.strip('\n')
+										if i<len(line):
+											data=data+','
+											i+=1
+									
+									
+									data=data+','+aa_ref+str(len(codon1)/3)+aa_new+','+codon+','+newcodon+','+str(frame)+'\n'
+									a.write(data)	
 a.close()							
 		
