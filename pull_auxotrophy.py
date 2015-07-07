@@ -3,7 +3,10 @@
 # result in auxotrophy.
 
 #usage:
-#python Population_Level_Seq_Analysis/pull_auxotrophy.py -auxofile /fh/fast/shou_w/NextGenSeq/reference/auxotrophy_annotations.txt -strainfile /fh/fast/shou_w/NextGenSeq/PopSeq/Parameter+Strain_Files/AaronMiller_strains.txt -dir /fh/fast/shou_w/NextGenSeq/PopSeq/MDunham/Miller_SulfateGlucosePhosphate_2015/
+#python Population_Level_Seq_Analysis/pull_auxotrophy.py 
+# -auxofile /fh/fast/shou_w/NextGenSeq/reference/auxotrophy_annotations.txt
+# -strainfile /fh/fast/shou_w/NextGenSeq/PopSeq/Parameter+Strain_Files/AaronMiller_strains.txt
+# -dir /fh/fast/shou_w/NextGenSeq/PopSeq/MDunham/Miller_SulfateGlucosePhosphate_2015/
 
 
 #import libraries needed
