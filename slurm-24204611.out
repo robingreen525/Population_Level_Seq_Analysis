@@ -1,0 +1,93 @@
+/usr/lib/python2.7/dist-packages/Bio/Entrez/Parser.py:525: UserWarning: Unable to load DTD file esearch.dtd.
+
+Bio.Entrez uses NCBI's DTD files to parse XML files returned by NCBI Entrez.
+Though most of NCBI's DTD files are included in the Biopython distribution,
+sometimes you may find that a particular DTD file is missing. While we can
+access the DTD file through the internet, the parser is much faster if the
+required DTD files are available locally.
+
+For this purpose, please download esearch.dtd from
+
+http://eutils.ncbi.nlm.nih.gov/eutils/dtd/20060628/esearch.dtd
+
+and save it either in directory
+
+/usr/lib/python2.7/dist-packages/Bio/Entrez/DTDs
+
+or in directory
+
+/home/rjgreen/.biopython/Bio/Entrez/DTDs
+
+in order for Bio.Entrez to find it.
+
+Alternatively, you can save esearch.dtd in the directory
+Bio/Entrez/DTDs in the Biopython distribution, and reinstall Biopython.
+
+Please also inform the Biopython developers about this missing DTD, by
+reporting a bug on https://github.com/biopython/biopython/issues or sign
+up to our mailing list and emailing us, so that we can include it with the
+next release of Biopython.
+
+Proceeding to access the DTD file through the internet...
+
+  warnings.warn(message)
+Going to download record 1 to 100
+Going to download record 101 to 200
+Going to download record 201 to 300
+Going to download record 301 to 400
+Going to download record 401 to 500
+Going to download record 501 to 600
+Going to download record 601 to 700
+Going to download record 701 to 800
+Going to download record 801 to 900
+Going to download record 901 to 1000
+Going to download record 1001 to 1100
+Going to download record 1101 to 1200
+Going to download record 1201 to 1300
+Going to download record 1301 to 1400
+Going to download record 1401 to 1500
+Going to download record 1501 to 1600
+Going to download record 1601 to 1700
+Going to download record 1701 to 1800
+Going to download record 1801 to 1900
+Going to download record 1901 to 2000
+Going to download record 2001 to 2100
+Going to download record 2101 to 2200
+Going to download record 2201 to 2300
+Going to download record 2301 to 2400
+Going to download record 2401 to 2500
+Going to download record 2501 to 2600
+Going to download record 2601 to 2700
+Going to download record 2701 to 2800
+Going to download record 2801 to 2900
+Going to download record 2901 to 3000
+Going to download record 3001 to 3100
+Going to download record 3101 to 3200
+Going to download record 3201 to 3300
+Going to download record 3301 to 3400
+Going to download record 3401 to 3500
+Going to download record 3501 to 3600
+Going to download record 3601 to 3700
+Going to download record 3701 to 3800
+Going to download record 3801 to 3900
+Going to download record 3901 to 4000
+Going to download record 4001 to 4100
+Going to download record 4101 to 4200
+Going to download record 4201 to 4300
+Going to download record 4301 to 4400
+Going to download record 4401 to 4500
+Going to download record 4501 to 4600
+Going to download record 4601 to 4700
+Going to download record 4701 to 4800
+Going to download record 4801 to 4900
+Going to download record 4901 to 5000
+Going to download record 5001 to 5100
+Going to download record 5101 to 5200
+Going to download record 5201 to 5300
+Going to download record 5301 to 5400
+Going to download record 5401 to 5500
+Going to download record 5501 to 5600
+Going to download record 5601 to 5700
+Going to download record 5701 to 5800
+Going to download record 5801 to 5900
+Going to download record 5901 to 5906

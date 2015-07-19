@@ -1,0 +1,34 @@
+# the purpose of this script is to annotate each SNP with the gene identifier (standard and systematic name)
+# along with what codon and position in the codon. This information can be used to determine which frame 
+# the mutation is in and predict amino acid substitutions  
+
+
+#usage:
+# python Population_Level_Seq_Analysis/annoate_snps.py -genefile /fh/fast/shou_w/NextGenSeq/reference/S288C.gff -strainfile /fh/fast/shou_w/NextGenSeq/PopSeq/Parameter+Strain_Files/AaronMiller_strains.txt -d /fh/fast/shou_w/NextGenSeq/PopSeq/MDunham/Miller_SulfateGlucosePhosphate_2015/
+# works if in /fh/fast/shou_w/NextGenSeq/PopSeq/MDunham/Miller_SulfateGlucosePhosphate_2015
+
+
+
+#import libraries needed
+import sys
+import os
+import argparse
+
+#define parsing options
+parser = argparse.ArgumentParser()
+parser.add_argument('-strainfile', type=argparse.FileType('r'))
+parser.add_argument('-dir', dest='dir')
+
+args = parser.parse_args()
+
+# get the path where the data are stored. will be used with other strings later
+path=args.dir
+
+
+strains=[]
+### use the strain file flag to get the list of strains to analyze
+ll=args.strainfile.readlines()
+for line in ll:
+	line=line.split('\t')
+	strains.append(line[0])
+	
