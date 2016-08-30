@@ -1,10 +1,11 @@
-# the purpose of this script is to extract the auxotrophy mutations in the 'master.csv'
+# the purpose of this script is to extract the inviable  mutations (so essential genes as annotated by SGD) in the 'master.csv'
 #file that I have generated so I restrict my analysis only to SNPs that could potentially 
-# result in auxotrophy.
+# result in invability. I will do this to see if I see genes putative deleterious mutations in essential genes at the same or similar frequencies in Aaron's populations
+# compared to my previously found auxotrophy mutations to get a sense of the amount of background noise in my data
 
 #usage:
-#python Population_Level_Seq_Analysis/pull_auxotrophy.py 
-# -auxofile /fh/fast/shou_w/NextGenSeq/reference/auxotrophy_annotations.txt
+#python Population_Level_Seq_Analysis/pull_inviable.py 
+# -inviablefile /fh/fast/shou_w/NextGenSeq/reference/inviable_annotations.txt
 # -strainfile /fh/fast/shou_w/NextGenSeq/PopSeq/Parameter+Strain_Files/AaronMiller_strains.txt
 # -dir /fh/fast/shou_w/NextGenSeq/PopSeq/MDunham/Miller_SulfateGlucosePhosphate_2015/
 
@@ -16,7 +17,7 @@ import argparse
 
 #define parsing options
 parser = argparse.ArgumentParser()
-parser.add_argument('-auxofile',type=argparse.FileType('r'))
+parser.add_argument('-inviablefile',type=argparse.FileType('r'))
 parser.add_argument('-strainfile', type=argparse.FileType('r'))
 parser.add_argument('-dir', dest='dir')
 
@@ -49,7 +50,7 @@ file=path+'/master.csv'
 f=open(file,'r')
 ll=f.readlines()
 
-newfile=path+'/auxotrophy_snps.csv'
+newfile=path+'/inviable_snps.csv'
 a=open(newfile,'w')
 
 a.write('sample,chr,position,ref_allele,ref_reads,alt_allele,alt_reads,strand,SysName,gene,freq,Mutation,ref_codon,alt_codon,frame,auxotrophy,ref\n')

@@ -1,10 +1,10 @@
-# the purpose of this script is to extract the auxotrophy mutations in the 'master.csv'
+# the purpose of this script is to extract the inviable mutations (essential genes as annotated by SGD) in the 'master.csv'
 #file that I have generated so I restrict my analysis only to SNPs that could potentially 
 # result in auxotrophy.
 
 #usage:
-#python Population_Level_Seq_Analysis/pull_auxotrophy.py 
-# -auxofile /fh/fast/shou_w/NextGenSeq/reference/auxotrophy_annotations.txt
+#python Population_Level_invSeq_Analysis/pull_inviable.py 
+# -auxofile /fh/fast/shou_w/NextGenSeq/reference/inviable_annotations.txt
 # -strainfile /fh/fast/shou_w/NextGenSeq/PopSeq/Parameter+Strain_Files/AaronMiller_strains.txt
 # -dir /fh/fast/shou_w/NextGenSeq/PopSeq/MDunham/Miller_SulfateGlucosePhosphate_2015/
 
